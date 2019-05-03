@@ -15,6 +15,8 @@ public class ClojureProperties {
     public static final String EASTWOOD_OPTIONS = "sonar.clojure.eastwood.options";
     public static final String LEIN_NVD_DISABLED = "sonar.clojure.lein-nvd.disabled";
     public static final String LEIN_NVD_JSON_OUTPUT_LOCATION = "sonar.clojure.lein-nvd.json-output-location";
+    public static final String LEIN_NVD_ARGUMENTS = "sonar.clojure.lein-nvd.arguments";
+    public static final String LEIN_NVD_ARGUMENTS_DEFAULT_VALUE = "nvd check";
     public static final String MAIN_CATEGORY = "ClojureLanguage";
     public static final String CLOVERAGE_DISABLED = "sonar.clojure.cloverage.disabled";
     public static final String KIBIT_DISABLED = "sonar.clojure.kibit.disabled";
@@ -31,6 +33,7 @@ public class ClojureProperties {
                 getCloverageJsonOutputLocation(),
                 getLeinNvdDisabledProperty(),
                 getLeinNVdXMLOutputLocation(),
+                getLeinNVDArguments(),
                 getKibitDisabledProperty());
     }
 
@@ -111,6 +114,16 @@ public class ClojureProperties {
                 .defaultValue("src/test/resources/nvd-report.json")
                 .name("Lein NVD output location")
                 .description("Set this to path where Lein NVD generates the result xml file.")
+                .build();
+    }
+
+    public static PropertyDefinition getLeinNVDArguments() {
+        return PropertyDefinition.builder(LEIN_NVD_ARGUMENTS)
+                .category("ClojureLanguage")
+                .subCategory("Sensors")
+                .defaultValue("nvd check")
+                .name("Lein NVD command line arguments")
+                .description("Set this if you want to override default nvd behaviour")
                 .build();
     }
 

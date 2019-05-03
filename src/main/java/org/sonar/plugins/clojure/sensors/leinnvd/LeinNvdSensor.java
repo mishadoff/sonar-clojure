@@ -30,7 +30,6 @@ public class LeinNvdSensor extends AbstractSensor implements Sensor {
     private static final Logger LOG = Loggers.get(LeinNvdSensor.class);
 
     private static final String PLUGIN_NAME = "nvd";
-    private static final String[] LEIN_ARGUMENTS = {"nvd", "check"};
 
     public LeinNvdSensor(CommandRunner commandRunner) {
         super(commandRunner);
@@ -53,7 +52,12 @@ public class LeinNvdSensor extends AbstractSensor implements Sensor {
             if (context.config().get(ClojureProperties.LEIN_NVD_JSON_OUTPUT_LOCATION).isPresent()){
                 LOG.info("Running Lein NVD");
 
-                CommandStreamConsumer stdOut =  this.commandRunner.run(LEIN_COMMAND, LEIN_ARGUMENTS);
+                final String[] leinArguments = context.config()
+                        .get(ClojureProperties.LEIN_NVD_ARGUMENTS)
+                        .orElse(ClojureProperties.LEIN_NVD_ARGUMENTS_DEFAULT_VALUE)
+                        .split(" ");
+
+                CommandStreamConsumer stdOut =  this.commandRunner.run(LEIN_COMMAND, leinArguments);
                 if (isLeinInstalled(stdOut.getData()) && isPluginInstalled(stdOut.getData(), PLUGIN_NAME)){
                     FileSystem fs = context.fileSystem();
                     Optional<String> vulnerabilityContext = readFromFileSystem(context.config().get(ClojureProperties.LEIN_NVD_JSON_OUTPUT_LOCATION).get());
